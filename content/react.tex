@@ -1,60 +1,7 @@
-\documentclass[10pt,landscape,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[ngerman]{babel} % change to english if needed
-\usepackage{multicol}
-\usepackage[margin=0.55cm]{geometry}
-\usepackage{xcolor}
-\usepackage{enumitem}
-\usepackage[explicit]{titlesec}
-\usepackage{listings}
-\usepackage{hyperref}
-
-% ---------- Colors ----------
-\definecolor{reactblue}{HTML}{087EA4}
-\definecolor{codebg}{HTML}{F5F7FA}
-\definecolor{codeblue}{HTML}{1F3A93}
-\definecolor{codegreen}{HTML}{1B7F3A}
-\definecolor{codered}{HTML}{B00020}
-
-% ---------- Multicol / Layout ----------
-\setlength{\columnsep}{0.45cm}
-\setlength{\columnseprule}{0.2pt}
-\renewcommand{\columnseprulecolor}{\color{gray}}
-
-% ---------- Headings ----------
-\titleformat{\section}
-  {\small\bfseries}
-  {}{0pt}
-  {\colorbox{reactblue}{\parbox{\dimexpr\linewidth-2\fboxsep\relax}{\centering\strut\color{white}#1}}}
-
-\titleformat{\subsection}
-{\footnotesize\bfseries\color{reactblue}}
-{}{0pt}{\underline}
-
-\setlist[itemize]{leftmargin=*, noitemsep, topsep=1pt, parsep=0pt, partopsep=0pt}
-\setlist[enumerate]{leftmargin=*, noitemsep, topsep=1pt, parsep=0pt, partopsep=0pt}
-
-% ---------- Listings (JS/JSX-ish) ----------
 \lstset{
-  backgroundcolor=\color{codebg},
-  basicstyle=\ttfamily\tiny,
-  keywordstyle=\color{codeblue}\bfseries,
-  commentstyle=\color{codegreen},
-  stringstyle=\color{codered},
-  breaklines=true,
-  frame=none,
-  aboveskip=2pt,
-  belowskip=2pt,
-  showstringspaces=false,
-  language=Java, % close enough for compact cheat sheet
+  language=Java,
   morekeywords={function,const,let,var,return,import,export,default,from,useState,useEffect,useRef,useReducer,useContext,createContext,memo,useCallback,props,children}
 }
-
-\pagestyle{empty}
-
-\begin{document}
-
 \begin{multicols*}{3}
 
 % =========================================================
@@ -352,4 +299,3 @@ function App() {
 \end{itemize}
 
 \end{multicols*}
-\end{document}
