@@ -8,15 +8,15 @@
 \section{TypeScript Basics}
 \begin{itemize}
 \item TS is a superset of JS with static typing.
-\item \textbf{Structural Typing}: Types are compatible if their shape matches (duck typing) [file:4].
-\item \textbf{Type Inference}: TS infers types when not explicit (e.g., \texttt{let n = 5} is number) [file:4].
+\item \textbf{Structural Typing}: Types are compatible if their shape matches (duck typing) .
+\item \textbf{Type Inference}: TS infers types when not explicit (e.g., \texttt{let n = 5} is number) .
 \end{itemize}
 
 \subsection{Basic Types}
 \begin{itemize}
 \item \texttt{string, number, boolean}
 \item \texttt{any}: Opt-out of checking (avoid if possible).
-\item \texttt{unknown}: Safer \texttt{any}; must check type before use [file:4].
+\item \texttt{unknown}: Safer \texttt{any}; must check type before use .
 \item \texttt{void}: No return value.
 \item \texttt{null, undefined}: Strictly checked if \texttt{strictNullChecks: true}.
 \end{itemize}
@@ -32,7 +32,7 @@ let item: [string, number] = ["Id", 1]; // Tuple
 \section{Interfaces \& Types}
 \subsection{Interfaces}
 \begin{itemize}
-\item Define object shapes. Can be extended/implemented [file:4].
+\item Define object shapes. Can be extended/implemented .
 \end{itemize}
 \begin{lstlisting}
 interface User {
@@ -56,7 +56,7 @@ type Admin = User & { permissions: string[] }; // Intersection
 % =========================================================
 \section{Classes}
 \begin{itemize}
-\item Access modifiers: \texttt{public} (default), \texttt{private} (\#), \texttt{protected} [file:4].
+\item Access modifiers: \texttt{public} (default), \texttt{private} (\#), \texttt{protected} .
 \item Parameter properties: Shortcuts in constructor.
 \end{itemize}
 
@@ -91,13 +91,13 @@ const log = (msg: string): void => console.log(msg);
 
 \subsection{Overloading}
 \begin{itemize}
-\item Define multiple signatures, then one implementation handling all cases [file:4].
+\item Define multiple signatures, then one implementation handling all cases .
 \end{itemize}
 
 % =========================================================
 \section{Generics}
 \begin{itemize}
-\item Reusable components working with various types [file:4].
+\item Reusable components working with various types .
 \item Convention: \texttt{T, U, V}.
 \end{itemize}
 
@@ -129,7 +129,7 @@ function printId(id: number | string) {
 
 \subsection{Literal Types}
 \begin{itemize}
-\item Exact values as types [file:4].
+\item Exact values as types .
 \end{itemize}
 \begin{lstlisting}
 type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
@@ -157,7 +157,7 @@ function update(todo: Partial<Todo>) { ... }
 % =========================================================
 \section{Modules}
 \begin{itemize}
-\item File is a module if it has top-level \texttt{import} or \texttt{export} [file:4].
+\item File is a module if it has top-level \texttt{import} or \texttt{export} .
 \end{itemize}
 \begin{lstlisting}
 // math.ts
@@ -172,7 +172,7 @@ import { PI, add as sum } from "./math";
 \section{TS Specific Operators}
 \subsection{Non-null Assertion (!)}
 \begin{itemize}
-\item Tell TS a value is definitely not null/undefined [file:4].
+\item Tell TS a value is definitely not null/undefined .
 \end{itemize}
 \begin{lstlisting}
 const el = document.getElementById("app");
@@ -181,7 +181,7 @@ el!.innerText = "Hello"; // Trust me, el exists
 
 \subsection{Optional Chaining (?.)}
 \begin{itemize}
-\item Stop early if null/undefined [file:4].
+\item Stop early if null/undefined .
 \end{itemize}
 \begin{lstlisting}
 let x = user?.address?.city;
@@ -190,7 +190,7 @@ let x = user?.address?.city;
 % =========================================================
 \section{Decorators}
 \begin{itemize}
-\item Functions adding metadata/behavior to classes/members [file:4].
+\item Functions adding metadata/behavior to classes/members .
 \item Syntax: \texttt{@expression}
 \end{itemize}
 \begin{lstlisting}

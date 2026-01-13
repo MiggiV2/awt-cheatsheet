@@ -12,34 +12,34 @@
 \section{Concepts \& Architecture}
 \subsection{Virtual Machines vs. Containers}
 \begin{itemize}
-\item \textbf{VM}: Hardware virtualization via Hypervisor. Each VM has a full Guest OS. Strong isolation but heavy resources/slow startup [file:5].
-\item \textbf{Container}: OS-level virtualization. Shares Host OS kernel. Isolated via Namespaces (PID, NET) and Cgroups (resources). Lightweight \& fast [file:5].
+\item \textbf{VM}: Hardware virtualization via Hypervisor. Each VM has a full Guest OS. Strong isolation but heavy resources/slow startup .
+\item \textbf{Container}: OS-level virtualization. Shares Host OS kernel. Isolated via Namespaces (PID, NET) and Cgroups (resources). Lightweight \& fast .
 \end{itemize}
 
 \subsection{Core Components}
 \begin{itemize}
-\item \textbf{Image}: Read-only template (snapshot) to create containers. Layered filesystem [file:5].
-\item \textbf{Container}: Runnable instance of an image. Isolated process [file:5].
-\item \textbf{Daemon}: Background process managing images/containers [file:5].
-\item \textbf{Registry}: Storage for images (e.g., Docker Hub) [file:5].
+\item \textbf{Image}: Read-only template (snapshot) to create containers. Layered filesystem .
+\item \textbf{Container}: Runnable instance of an image. Isolated process .
+\item \textbf{Daemon}: Background process managing images/containers .
+\item \textbf{Registry}: Storage for images (e.g., Docker Hub) .
 \end{itemize}
 
 % =========================================================
 \section{Dockerfile}
 \begin{itemize}
 \item Text file with instructions to build an image.
-\item \texttt{docker build -t name:tag .} builds the image [file:5].
+\item \texttt{docker build -t name:tag .} builds the image .
 \end{itemize}
 
 \subsection{Key Instructions}
 \begin{itemize}
-\item \texttt{FROM image}: Base image (start here) [file:5].
-\item \texttt{WORKDIR /path}: Set working directory [file:5].
-\item \texttt{COPY src dest}: Copy host files to container [file:5].
-\item \texttt{RUN cmd}: Execute command \textit{during build} (creates layer) [file:5].
-\item \texttt{CMD ["exe","param"]}: Default command \textit{at runtime} [file:5].
-\item \texttt{EXPOSE port}: Document listening port [file:5].
-\item \texttt{ENV key=val}: Set environment variables [file:5].
+\item \texttt{FROM image}: Base image (start here) .
+\item \texttt{WORKDIR /path}: Set working directory .
+\item \texttt{COPY src dest}: Copy host files to container .
+\item \texttt{RUN cmd}: Execute command \textit{during build} (creates layer) .
+\item \texttt{CMD ["exe","param"]}: Default command \textit{at runtime} .
+\item \texttt{EXPOSE port}: Document listening port .
+\item \texttt{ENV key=val}: Set environment variables .
 \end{itemize}
 
 \begin{lstlisting}
@@ -54,7 +54,7 @@ CMD ["npm", "start"]
 
 \subsection{Multi-Stage Builds}
 \begin{itemize}
-\item Separate build environment from runtime environment to keep final image small [file:5].
+\item Separate build environment from runtime environment to keep final image small .
 \item Copy artifacts between stages with \texttt{COPY --from=name}.
 \end{itemize}
 
@@ -74,17 +74,17 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 \section{Data \& Networking}
 \subsection{Persistence}
 \begin{itemize}
-\item \textbf{Bind Mount}: Maps host path to container path. Changes reflect immediately (good for dev) [file:5].
+\item \textbf{Bind Mount}: Maps host path to container path. Changes reflect immediately (good for dev) .
   \begin{itemize}
     \item \texttt{-v ./host/path:/container/path}
   \end{itemize}
-\item \textbf{Volume}: Managed by Docker (in \texttt{/var/lib/docker/volumes}). Best for DB data/production [file:5].
+\item \textbf{Volume}: Managed by Docker (in \texttt{/var/lib/docker/volumes}). Best for DB data/production .
 \end{itemize}
 
 \subsection{Networking}
 \begin{itemize}
 \item Containers have internal IPs.
-\item \textbf{Port Mapping}: Map host port to container port to access from outside [file:5].
+\item \textbf{Port Mapping}: Map host port to container port to access from outside .
   \begin{itemize}
     \item \texttt{-p 8080:80} (Host:Container)
   \end{itemize}
@@ -93,17 +93,17 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 % =========================================================
 \section{Docker Compose}
 \begin{itemize}
-\item Define multi-container apps in \texttt{docker-compose.yml} (Infrastructure as Code) [file:5].
+\item Define multi-container apps in \texttt{docker-compose.yml} (Infrastructure as Code) .
 \item Services refer to containers.
 \end{itemize}
 
 \subsection{Service Configuration}
 \begin{itemize}
-\item \texttt{build}: Build from Dockerfile instead of pulling image [file:5].
-\item \texttt{ports}: List of \texttt{"host:container"} mappings [file:5].
-\item \texttt{volumes}: Mounts \texttt{./local:/container} or named volumes [file:5].
-\item \texttt{environment}: Set env vars (e.g., DB credentials) [file:5].
-\item \texttt{depends\_on}: Start order (does not wait for readiness) [file:5].
+\item \texttt{build}: Build from Dockerfile instead of pulling image .
+\item \texttt{ports}: List of \texttt{"host:container"} mappings .
+\item \texttt{volumes}: Mounts \texttt{./local:/container} or named volumes .
+\item \texttt{environment}: Set env vars (e.g., DB credentials) .
+\item \texttt{depends\_on}: Start order (does not wait for readiness) .
 \end{itemize}
 
 \begin{lstlisting}
@@ -134,16 +134,16 @@ volumes:
 
 \subsection{Production vs. Dev}
 \begin{itemize}
-\item \textbf{Dev}: Use bind mounts to sync code, install dev deps, use dev server (hot reload) [file:5].
-\item \textbf{Prod}: Use Multi-stage builds, copy only built artifacts (dist), use lightweight runners (Nginx, Alpine), strict versions [file:5].
+\item \textbf{Dev}: Use bind mounts to sync code, install dev deps, use dev server (hot reload) .
+\item \textbf{Prod}: Use Multi-stage builds, copy only built artifacts (dist), use lightweight runners (Nginx, Alpine), strict versions .
 \end{itemize}
 
 % =========================================================
 \section{Common Pitfalls}
 \begin{itemize}
-\item \textbf{CMD vs ENTRYPOINT}: \texttt{ENTRYPOINT} is the main executable; \texttt{CMD} provides default args. \texttt{docker run} overrides CMD, appends to ENTRYPOINT [file:5].
-\item \textbf{ADD vs COPY}: Prefer \texttt{COPY}. \texttt{ADD} has extra magic (URL download, tar extraction) [file:5].
-\item \textbf{Layer Caching}: Put frequently changing commands (COPY source) \textit{after} stable ones (npm install) to speed up builds [file:5].
+\item \textbf{CMD vs ENTRYPOINT}: \texttt{ENTRYPOINT} is the main executable; \texttt{CMD} provides default args. \texttt{docker run} overrides CMD, appends to ENTRYPOINT .
+\item \textbf{ADD vs COPY}: Prefer \texttt{COPY}. \texttt{ADD} has extra magic (URL download, tar extraction) .
+\item \textbf{Layer Caching}: Put frequently changing commands (COPY source) \textit{after} stable ones (npm install) to speed up builds .
 \item \textbf{Zombies}: Use \texttt{tini} or \texttt{init} in base image if processes don't stop correctly.
 \end{itemize}
 

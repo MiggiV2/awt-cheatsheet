@@ -10,28 +10,28 @@
 % =========================================================
 \section{React Overview}
 \begin{itemize}
-  \item React is an open source JS library for building SPAs; key ideas: components, declarative UI, virtual DOM, props + state, client-side routing via React Router [file:3].
-  \item Component rerendering: when \texttt{state} changes, React calls the component function again to produce a new UI representation [file:3].
+  \item React is an open source JS library for building SPAs; key ideas: components, declarative UI, virtual DOM, props + state, client-side routing via React Router .
+  \item Component rerendering: when \texttt{state} changes, React calls the component function again to produce a new UI representation .
 \end{itemize}
 
 \subsection{Project Quickstart}
 \begin{itemize}
-  \item Create app: \texttt{npx create-react-app my-app} [file:3]
-  \item Run dev server: \texttt{npm start} [file:3]
+  \item Create app: \texttt{npx create-react-app my-app} 
+  \item Run dev server: \texttt{npm start} 
 \end{itemize}
 
 % =========================================================
 \section{JSX Essentials}
 \subsection{What is JSX?}
 \begin{itemize}
-  \item JSX lets you embed HTML-like markup in JavaScript and return it from components [file:3].
+  \item JSX lets you embed HTML-like markup in JavaScript and return it from components .
 \end{itemize}
 
 \subsection{JSX Rules (Exam Favorites)}
 \begin{itemize}
-  \item Return a single root element (or use a fragment \texttt{<>...</>}) [file:3].
-  \item Close all tags (even if HTML would allow omission) [file:3].
-  \item Most attributes are camelCase; \texttt{className} instead of \texttt{class} [file:3].
+  \item Return a single root element (or use a fragment \texttt{<>...</>}) .
+  \item Close all tags (even if HTML would allow omission) .
+  \item Most attributes are camelCase; \texttt{className} instead of \texttt{class} .
 \end{itemize}
 
 \begin{lstlisting}
@@ -57,8 +57,8 @@ function Hello({ name }) {
 
 \subsection{Props}
 \begin{itemize}
-  \item Props pass data from parent to child as attributes in JSX [file:3].
-  \item Common pattern: destructuring props in the parameter list [file:3].
+  \item Props pass data from parent to child as attributes in JSX .
+  \item Common pattern: destructuring props in the parameter list .
 \end{itemize}
 
 \begin{lstlisting}
@@ -69,7 +69,7 @@ function App() {
 
 \subsection{children Prop}
 \begin{itemize}
-  \item \texttt{children} is the content between opening/closing component tags, used for composition [file:3].
+  \item \texttt{children} is the content between opening/closing component tags, used for composition .
 \end{itemize}
 
 \begin{lstlisting}
@@ -83,7 +83,7 @@ function Box({ children }) {
 \section{State \& Events}
 \subsection{useState}
 \begin{itemize}
-  \item \texttt{useState(initial)} returns \texttt{[value, setter]}; calling setter triggers rerender [file:3].
+  \item \texttt{useState(initial)} returns \texttt{[value, setter]}; calling setter triggers rerender .
 \end{itemize}
 
 \begin{lstlisting}
@@ -104,7 +104,7 @@ function Counter() {
 
 \subsection{Updating arrays/objects}
 \begin{itemize}
-  \item Use immutable updates (create new arrays/objects) to ensure React notices changes; spread operator is common [file:3].
+  \item Use immutable updates (create new arrays/objects) to ensure React notices changes; spread operator is common .
 \end{itemize}
 
 \begin{lstlisting}
@@ -114,7 +114,7 @@ setFieldState({ ...fieldState, className: "error" });
 
 \subsection{Passing args to handlers}
 \begin{itemize}
-  \item Use arrow function wrappers to pass the item/value [file:3].
+  \item Use arrow function wrappers to pass the item/value .
 \end{itemize}
 
 \begin{lstlisting}
@@ -124,7 +124,7 @@ setFieldState({ ...fieldState, className: "error" });
 % =========================================================
 \section{Forms (Controlled)}
 \begin{itemize}
-  \item Controlled input: value comes from state; onChange updates state [file:3].
+  \item Controlled input: value comes from state; onChange updates state .
 \end{itemize}
 
 \begin{lstlisting}
@@ -132,7 +132,7 @@ function AddTodoForm({ todos, setTodos }) {
   const [description, setDescription] = useState("");
 
   const handleAdd = (event) => {
-    event.preventDefault(); // when using a <form> [file:3]
+    event.preventDefault(); // when using a <form> 
     const newTodo = {
       id: Date.now(),
       description,
@@ -159,8 +159,8 @@ function AddTodoForm({ todos, setTodos }) {
 \section{Effects \& Refs}
 \subsection{useEffect}
 \begin{itemize}
-  \item Use \texttt{useEffect} for async loading / side effects; common pattern: call fetch once (empty dependency list) [file:3].
-  \item Calling async load directly inside render causes infinite rerenders; \texttt{useEffect} avoids that [file:3].
+  \item Use \texttt{useEffect} for async loading / side effects; common pattern: call fetch once (empty dependency list) .
+  \item Calling async load directly inside render causes infinite rerenders; \texttt{useEffect} avoids that .
 \end{itemize}
 
 \begin{lstlisting}
@@ -176,8 +176,8 @@ useEffect(() => {
 
 \subsection{useRef (DOM access)}
 \begin{itemize}
-  \item \texttt{useRef} stores a reference; DOM element is in \texttt{ref.current} [file:3].
-  \item Example use: focus an input after data arrives and rerender happened [file:3].
+  \item \texttt{useRef} stores a reference; DOM element is in \texttt{ref.current} .
+  \item Example use: focus an input after data arrives and rerender happened .
 \end{itemize}
 
 \begin{lstlisting}
@@ -194,8 +194,8 @@ return <input ref={inputRef} />;
 \section{Advanced State}
 \subsection{useReducer}
 \begin{itemize}
-  \item Useful when logic/state becomes complex; central handler (reducer) processes actions [file:3].
-  \item Syntax: \texttt{const [state, dispatch] = useReducer(reducer, initialState)} [file:3].
+  \item Useful when logic/state becomes complex; central handler (reducer) processes actions .
+  \item Syntax: \texttt{const [state, dispatch] = useReducer(reducer, initialState)} .
 \end{itemize}
 
 \begin{lstlisting}
@@ -220,7 +220,7 @@ dispatch({ type: "done", todo });
 
 \subsection{Context (Global State)}
 \begin{itemize}
-  \item Avoid ``prop drilling'' by providing data via Context and consuming with \texttt{useContext} [file:3].
+  \item Avoid ``prop drilling'' by providing data via Context and consuming with \texttt{useContext} .
 \end{itemize}
 
 \begin{lstlisting}
@@ -245,14 +245,14 @@ function Dashboard() {
 \section{Performance}
 \subsection{Problem: Unnecessary rerenders}
 \begin{itemize}
-  \item If a parent rerenders, new function references can cause child rerenders even when data didn't change [file:3].
+  \item If a parent rerenders, new function references can cause child rerenders even when data didn't change .
 \end{itemize}
 
 \subsection{memo + useCallback}
 \begin{itemize}
-  \item \texttt{memo(Component)}: rerender child only if props changed [file:3].
-  \item \texttt{useCallback(fn, deps)}: keep function reference stable between renders [file:3].
-  \item Use only when needed; adds complexity [file:3].
+  \item \texttt{memo(Component)}: rerender child only if props changed .
+  \item \texttt{useCallback(fn, deps)}: keep function reference stable between renders .
+  \item Use only when needed; adds complexity .
 \end{itemize}
 
 \begin{lstlisting}
@@ -268,7 +268,7 @@ const addTodo = useCallback(() => {
 % =========================================================
 \section{React Router (Basics)}
 \begin{itemize}
-  \item React Router is provided by \texttt{react-router-dom} and enables client-side routing in SPAs [file:3].
+  \item React Router is provided by \texttt{react-router-dom} and enables client-side routing in SPAs .
 \end{itemize}
 
 \begin{lstlisting}
@@ -295,10 +295,10 @@ function App() {
 % =========================================================
 \section{Exam Pitfalls}
 \begin{itemize}
-  \item Mutating state directly (e.g., \texttt{todo.status = "closed"}) may not rerender; set new state immutably [file:3].
-  \item Missing \texttt{key} in lists hurts correctness/performance; set stable keys in \texttt{map} [file:3].
-  \item useEffect dependencies: empty \texttt{[]} means ``run once''; missing deps can cause stale values or extra calls [file:3].
-  \item For \texttt{<form>}, use \texttt{event.preventDefault()} to prevent page reload on submit [file:3].
+  \item Mutating state directly (e.g., \texttt{todo.status = "closed"}) may not rerender; set new state immutably .
+  \item Missing \texttt{key} in lists hurts correctness/performance; set stable keys in \texttt{map} .
+  \item useEffect dependencies: empty \texttt{[]} means ``run once''; missing deps can cause stale values or extra calls .
+  \item For \texttt{<form>}, use \texttt{event.preventDefault()} to prevent page reload on submit .
 \end{itemize}
 
 \end{multicols*}
