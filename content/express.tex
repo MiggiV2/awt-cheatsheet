@@ -1,0 +1,318 @@
+\lstset{
+  language=Java,
+  morekeywords={function,const,let,var,return,import,export,default,from,async,await,try,catch,throw,
+    require,module,exports,process,__dirname,
+    express,Router,next,req,res,
+    get,post,put,patch,delete,use,listen,
+    json,status,send,sendFile,redirect,render,setHeader,
+    app,router,middleware,
+    dotenv,nodemon,cors,morgan,
+    params,query,body,headers,cookies,session}
+}
+
+\begin{multicols*}{3}
+% =========================================================
+\section{Express Basics}
+\begin{itemize}
+\item Express is a minimal Node.js web framework: routing + middleware pipeline.
+\item Request flow: middleware run in order; each calls \texttt{next()} or ends response.
+\item Common pattern: \texttt{app.use(globalMiddleware)} then \texttt{app.use('/api', apiRouter)}.
+\end{itemize}
+
+\subsection{Install \& run}
+\begin{itemize}
+\item Init: \texttt{npm init -y}
+\item Install: \texttt{npm i express}
+\item Dev reload: \texttt{npm i -D nodemon}
+\item Run: \texttt{node server.js} or \texttt{nodemon server.js}
+\end{itemize}
+
+\begin{lstlisting}
+// server.js
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => res.send('OK'));
+
+app.listen(3000, () => console.log('http://localhost:3000'));
+\end{lstlisting}
+
+% =========================================================
+\section{Routing}
+\subsection{HTTP methods}
+\begin{itemize}
+\item \texttt{app.get/post/put/patch/delete(path, handler)}
+\item Path can include params: \texttt{/users/:id}
+\end{itemize}
+
+\begin{lstlisting}
+app.get('/users', (req, res) => res.json([]));
+
+app.get('/users/:id', (req, res) => {
+  res.json({ id: req.params.id });
+});
+
+app.post('/users', (req, res) => {
+  res.status(201).json(req.body);
+});
+\end{lstlisting}
+
+\subsection{Route ordering}
+\begin{itemize}
+\item First match wins; put specific routes before generic ones.
+\item A \texttt{*} catch-all should be last.
+\end{itemize}
+
+\begin{lstlisting}
+app.get('/health', ...);
+app.get('/users/:id', ...);
+// last:
+app.use((req, res) => res.status(404).send('Not found'));
+\end{lstlisting}
+
+% =========================================================
+\section{Request Data}
+\subsection{Params / query}
+\begin{itemize}
+\item Path params: \texttt{req.params}
+\item Query string: \texttt{req.query} (e.g. \texttt{?page=2})
+\end{itemize}
+
+\begin{lstlisting}
+app.get('/search', (req, res) => {
+  const q = req.query.q;     // ?q=term
+  res.json({ q });
+});
+\end{lstlisting}
+
+\subsection{Body parsing}
+\begin{itemize}
+\item JSON body: \texttt{app.use(express.json())}
+\item URL-encoded forms: \texttt{app.use(express.urlencoded(\{extended:true\}))}
+\end{itemize}
+
+\begin{lstlisting}
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.post('/echo', (req, res) => {
+  res.json({ body: req.body });
+});
+\end{lstlisting}
+
+\subsection{Headers}
+\begin{itemize}
+\item Read: \texttt{req.get('Header-Name')} or \texttt{req.headers}
+\item Set: \texttt{res.set('X-Name','value')}
+\end{itemize}
+
+% =========================================================
+\section{Responses}
+\begin{itemize}
+\item Send text: \texttt{res.send('hi')}
+\item JSON: \texttt{res.json(obj)}
+\item Status: \texttt{res.status(404).json(...)}
+\item Redirect: \texttt{res.redirect('/login')}
+\end{itemize}
+
+\begin{lstlisting}
+app.get('/download', (req, res) => {
+  res.sendFile(__dirname + '/files/report.pdf');
+});
+\end{lstlisting}
+
+\subsection{Typical status codes}
+\begin{itemize}
+\item 200 OK, 201 Created, 204 No Content
+\item 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found
+\item 409 Conflict, 422 Unprocessable Content
+\item 500 Internal Server Error
+\end{itemize}
+
+% =========================================================
+\section{Middleware}
+\subsection{Concept}
+\begin{itemize}
+\item Middleware signature: \texttt{(req,res,next)}
+\item Error middleware: \texttt{(err,req,res,next)}
+\item Use to: log, auth, validate, parse, handle errors, serve static files.
+\end{itemize}
+
+\begin{lstlisting}
+function logger(req, res, next) {
+  console.log(req.method, req.path);
+  next();
+}
+app.use(logger);
+\end{lstlisting}
+
+\subsection{Built-in middleware}
+\begin{itemize}
+\item \texttt{express.json()} parse JSON bodies
+\item \texttt{express.urlencoded(...)} parse form bodies
+\item \texttt{express.static('public')} serve static files
+\end{itemize}
+
+\begin{lstlisting}
+app.use('/static', express.static('public'));
+\end{lstlisting}
+
+% =========================================================
+\section{Routers}
+\begin{itemize}
+\item Use \texttt{express.Router()} to split routes by domain.
+\item Mount with prefix: \texttt{app.use('/api/users', usersRouter)}.
+\end{itemize}
+
+\begin{lstlisting}
+// users.routes.js
+const express = require('express');
+const router = express.Router();
+
+router.get('/', (req,res) => res.json([]));
+router.get('/:id', (req,res) => res.json({ id: req.params.id }));
+
+module.exports = router;
+
+// server.js
+const usersRouter = require('./users.routes');
+app.use('/api/users', usersRouter);
+\end{lstlisting}
+
+% =========================================================
+\section{Error Handling}
+\subsection{Throw vs next(err)}
+\begin{itemize}
+\item In sync handlers, \texttt{throw} is caught by Express (depending on version/flow).
+\item In async handlers, use \texttt{next(err)} or wrap with \texttt{try/catch}.
+\end{itemize}
+
+\begin{lstlisting}
+app.get('/boom', (req,res) => {
+  throw new Error('fail');
+});
+
+app.get('/async', async (req,res,next) => {
+  try {
+    await doWork();
+    res.send('ok');
+  } catch (err) {
+    next(err);
+  }
+});
+\end{lstlisting}
+
+\subsection{Central error middleware}
+\begin{itemize}
+\item Must be \texttt{app.use(...)} after routes.
+\item Avoid leaking internals; send message + status.
+\end{itemize}
+
+\begin{lstlisting}
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: 'Internal Server Error' });
+});
+\end{lstlisting}
+
+% =========================================================
+\section{Async Patterns}
+\begin{itemize}
+\item Prefer \texttt{async/await} for readability.
+\item Always handle promise rejections (try/catch or \texttt{next}).
+\item Ensure every request ends with a response or passes control via \texttt{next()}.
+\end{itemize}
+
+% =========================================================
+\section{Validation (Quick)}
+\begin{itemize}
+\item Validate input early; return 400 for missing/invalid data.
+\item Common checks: required fields, types, ranges, allowed enums.
+\end{itemize}
+
+\begin{lstlisting}
+app.post('/users', (req,res) => {
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ error: 'name required' });
+  res.status(201).json({ name });
+});
+\end{lstlisting}
+
+% =========================================================
+\section{CORS, Logging, Env}
+\subsection{CORS}
+\begin{itemize}
+\item If browser frontend calls API, configure CORS.
+\item Package: \texttt{npm i cors} then \texttt{app.use(cors())}.
+\end{itemize}
+
+\begin{lstlisting}
+const cors = require('cors');
+app.use(cors({ origin: 'http://localhost:5173' }));
+\end{lstlisting}
+
+\subsection{Logging}
+\begin{itemize}
+\item Package: \texttt{npm i morgan}
+\item Dev: \texttt{app.use(morgan('dev'))}
+\end{itemize}
+
+\begin{lstlisting}
+const morgan = require('morgan');
+app.use(morgan('dev'));
+\end{lstlisting}
+
+\subsection{Environment variables}
+\begin{itemize}
+\item Use \texttt{process.env.PORT} etc.
+\item Common: \texttt{npm i dotenv} + \texttt{require('dotenv').config()}
+\end{itemize}
+
+\begin{lstlisting}
+require('dotenv').config();
+const PORT = process.env.PORT || 3000;
+app.listen(PORT);
+\end{lstlisting}
+
+% =========================================================
+\section{Auth (Basics)}
+\begin{itemize}
+\item Use middleware to protect routes: check token/session, else 401.
+\item Put auth middleware before protected router or route.
+\end{itemize}
+
+\begin{lstlisting}
+function requireAuth(req,res,next){
+  const token = req.get('Authorization');
+  if (!token) return res.status(401).json({ error: 'Missing token' });
+  next();
+}
+
+app.get('/private', requireAuth, (req,res) => res.send('secret'));
+\end{lstlisting}
+
+% =========================================================
+\section{Static + SPA}
+\begin{itemize}
+\item Serve static build output (React/Vue/Angular) via \texttt{express.static}.
+\item SPA fallback: send \texttt{index.html} for unknown non-API routes.
+\end{itemize}
+
+\begin{lstlisting}
+app.use(express.static('dist'));
+app.get('*', (req,res) => {
+  res.sendFile(__dirname + '/dist/index.html');
+});
+\end{lstlisting}
+
+% =========================================================
+\section{Exam Pitfalls}
+\begin{itemize}
+\item Forgetting \texttt{express.json()} \(\Rightarrow\) \texttt{req.body} is undefined.
+\item Not returning after \texttt{res.status(...).json(...)} \(\Rightarrow\) double-send bugs.
+\item Error middleware must have 4 params: \texttt{(err,req,res,next)}.
+\item Order matters: middleware/routes then 404 handler then error handler.
+\end{itemize}
+
+% =========================================================
+\end{multicols*}
