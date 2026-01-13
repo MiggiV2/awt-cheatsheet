@@ -15,6 +15,36 @@
 \end{center}
 \begin{multicols*}{3}
 % =========================================================
+\section{REST}
+\textbf{REST}: Representational State Transfer.
+
+\subsection{Advantages}
+\begin{itemize}
+    \item \textbf{Statelessness}: Scalability (no client state on server) \& Fault tolerance.
+    \item \textbf{Simplicity}: Universal HTTP, readable URLs.
+    \item \textbf{Flexibility}: Multiple formats (JSON, XML), any client.
+    \item \textbf{Caching}: Via HTTP headers.
+\end{itemize}
+
+\subsection{Disadvantages}
+\begin{itemize}
+    \item \textbf{Overhead}: Statelessness increases payload size (tokens).
+    \item \textbf{Performance}: JSON/HTTP less efficient than binary.
+    \item \textbf{No State Management}: Must be handled by client/DB.
+    \item \textbf{Method Ambiguity}: Overloading HTTP methods.
+    \item \textbf{Documentation}: No strict contract (unlike GraphQL).
+\end{itemize}
+
+\subsection{HTTP Methods}
+\begin{itemize}
+    \item \textbf{GET}: Retrieve info about a resource.
+    \item \textbf{POST}: Submit data / create new resource.
+    \item \textbf{PUT}: Update resource or create sub-resource.
+    \item \textbf{PATCH}: Partially update resource.
+    \item \textbf{DELETE}: Delete a resource.
+\end{itemize}
+
+% =========================================================
 \section{Express Basics}
 \begin{itemize}
 \item Express is a minimal Node.js web framework: routing + middleware pipeline.
