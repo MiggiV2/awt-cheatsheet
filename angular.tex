@@ -1,0 +1,331 @@
+\documentclass[10pt,landscape,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[landscape,margin=1cm,top=1cm,bottom=1.5cm]{geometry}
+\usepackage{multicol}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+% --- Colors ---
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{keyword}{RGB}{0,0,139}
+\definecolor{string}{RGB}{0,100,0}
+\definecolor{comment}{RGB}{128,128,128}
+\definecolor{sectionbg}{RGB}{230,240,255}
+
+% --- Layout & Formatting ---
+\setlength{\columnsep}{1cm}
+\setlength{\columnseprule}{0.1pt}
+\titleformat{\section}{\large\bfseries\color{blue}}{}{0em}{}[\hrule]
+\titleformat{\subsection}{\bfseries\small}{}{0em}{}
+\titlespacing*{\section}{0pt}{5pt}{2pt}
+\titlespacing*{\subsection}{0pt}{3pt}{1pt}
+
+% --- Code Listing Settings ---
+\lstdefinelanguage{TypeScript}{
+  keywords={class, export, import, from, public, private, constructor, const, let, var, return, this, true, false, interface, implements, extends, null, async, await, readonly},
+  keywordstyle=\color{keyword}\bfseries,
+  ndkeywords={@Component, @Injectable, @NgModule, @Input, @Output, @if, @for, @else},
+  ndkeywordstyle=\color{purple}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=true,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{comment}\ttfamily,
+  stringstyle=\color{string}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
+
+\lstset{
+   language=TypeScript,
+   basicstyle=\ttfamily\scriptsize,
+   backgroundcolor=\color{codebg},
+   frame=none,
+   breaklines=true,
+   keywordstyle=\color{keyword},
+   commentstyle=\color{comment},
+   stringstyle=\color{string},
+   numbers=none,
+   showstringspaces=false,
+   tabsize=2,
+   aboveskip=2pt,
+   belowskip=2pt
+}
+
+\begin{document}
+\pagestyle{empty}
+
+\begin{center}
+    {\Huge \textbf{Angular Cheat Sheet}} \\
+    {\small Based on Lecture Ch. 4 (Prof. Windisch) -- Updated for Exam}
+\end{center}
+
+\begin{multicols*}{3}
+
+% ================= SECTION 1 =================
+\section{Components \& Basics}
+
+\subsection{Component Structure}
+A component consists of a Template (HTML), Style (CSS), and Class (TS).
+\begin{lstlisting}
+@Component({
+  selector: 'app-hello', // Usage: <app-hello>
+  template: `<h1>Hello {{name}}</h1>`,
+  styles: [`h1 { font-weight: normal; }`]
+})
+export class HelloComponent implements OnInit {
+  name: string = 'World';
+  
+  constructor() { } // DI Injection here
+  
+  ngOnInit(): void {
+    // Init logic (API calls)
+  }
+}
+\end{lstlisting}
+
+\subsection{Lifecycle Hooks}
+\begin{itemize}[leftmargin=*]
+    \item \texttt{ngOnChanges}: Input property changes.
+    \item \texttt{ngOnInit}: Comp. initialized (best for data fetch).
+    \item \texttt{ngAfterViewInit}: View fully initialized.
+    \item \texttt{ngOnDestroy}: Cleanup (subscriptions).
+\end{itemize}
+
+% ================= SECTION 2 =================
+\section{Data Binding}
+
+\subsection{Types of Binding}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Interpolation} (TS $\to$ DOM): \\
+    \texttt{Welcome \{\{ name \}\}}
+    \item \textbf{Property Binding} (TS $\to$ DOM): \\
+    \texttt{<img [src]="imageUrl">} \\
+    \texttt{<button [disabled]="!isValid">}
+    \item \textbf{Event Binding} (DOM $\to$ TS): \\
+    \texttt{<button (click)="save()">Save</button>}
+    \item \textbf{Two-Way Binding} (TS $\leftrightarrow$ DOM): \\
+    Requires \texttt{FormsModule} import. \\
+    \texttt{<input [(ngModel)]="username">}
+\end{itemize}
+
+% ================= SECTION 3 =================
+\section{Control Flow (Angular 17+)}
+
+\subsection{Conditional (@if)}
+Replaces \texttt{*ngIf}.
+\begin{lstlisting}
+@if (isLoggedIn) {
+  <user-dashboard />
+} @else if (isLoading) {
+  <spinner />
+} @else {
+  <login-form />
+}
+\end{lstlisting}
+
+\subsection{Loops (@for)}
+Replaces \texttt{*ngFor}. Requires \texttt{track}.
+\begin{lstlisting}
+<ul>
+  @for (user of users; track user.id; let i = $index) {
+    <li>{{ i }}: {{ user.name }}</li>
+  } @empty {
+    <li>No users found.</li>
+  }
+</ul>
+\end{lstlisting}
+
+\subsection{Switch (@switch)}
+\begin{lstlisting}
+@switch (status) {
+  @case ('active') { <span class="green">OK</span> }
+  @case ('banned') { <span class="red">NO</span> }
+  @default { <span>Unknown</span> }
+}
+\end{lstlisting}
+
+% ================= SECTION 4 =================
+\section{Services \& DI}
+
+\subsection{Defining a Service}
+Singleton services handle business logic/HTTP.
+\begin{lstlisting}
+@Injectable({ providedIn: 'root' })
+export class DataService {
+  constructor(private http: HttpClient) {}
+
+  getData(): Observable<Data[]> {
+    return this.http.get<Data[]>('/api/items');
+  }
+}
+\end{lstlisting}
+
+\subsection{Injecting \& Using Service}
+\begin{lstlisting}
+export class MyComponent {
+  // Injection via Constructor
+  constructor(private dataService: DataService) {}
+
+  load() {
+    this.dataService.getData().subscribe({
+      next: (data) => this.items = data,
+      error: (err) => console.error(err)
+    });
+  }
+}
+\end{lstlisting}
+
+% ================= SECTION 5 =================
+\section{Forms}
+
+\subsection{Template-Driven (Simple)}
+Best for simple forms (Login demo).
+\begin{itemize}[leftmargin=*]
+    \item Import \texttt{FormsModule}.
+    \item Use \texttt{[(ngModel)]} for binding.
+    \item Use \texttt{\#ref="ngModel"} for validation state.
+\end{itemize}
+\begin{lstlisting}
+<form #f="ngForm" (ngSubmit)="login(f)">
+  <input name="user" [(ngModel)]="user.name" 
+         required #u="ngModel">
+  
+  @if (u.invalid && u.touched) {
+    <div>Name required</div>
+  }
+  
+  <button [disabled]="f.invalid">Login</button>
+</form>
+\end{lstlisting}
+
+\subsection{Reactive Forms (Complex)}
+More control, testable. (ACME demo).
+\begin{itemize}[leftmargin=*]
+    \item Import \texttt{ReactiveFormsModule}.
+    \item Logic in Class (\texttt{FormGroup}, \texttt{FormControl}).
+\end{itemize}
+\begin{lstlisting}
+// Component
+form = new FormGroup({
+  name: new FormControl('', Validators.required),
+  email: new FormControl('', [Validators.email])
+});
+
+// Template
+<form [formGroup]="form" (ngSubmit)="save()">
+  <input formControlName="name">
+</form>
+\end{lstlisting}
+
+% ================= SECTION 6 =================
+\section{Routing}
+
+\subsection{Route Definition (routes.ts)}
+\begin{lstlisting}
+export const routes: Routes = [
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'users/:id', component: UserDetailComponent },
+  { path: '**', component: NotFoundComponent }
+];
+\end{lstlisting}
+
+\subsection{Navigation}
+\textbf{In Template:}
+\begin{lstlisting}
+<a [routerLink]="['/users', user.id]">View</a>
+<router-outlet></router-outlet> <!-- Placeholder -->
+\end{lstlisting}
+
+\textbf{In Code:}
+\begin{lstlisting}
+constructor(private router: Router) {}
+
+goBack() {
+  this.router.navigate(['/home']);
+}
+\end{lstlisting}
+
+% ================= SECTION 7 =================
+\section{Observables (RxJS)}
+
+\subsection{Key Concepts}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Observable}: Stream of events over time.
+    \item \textbf{Observer}: Object with \texttt{next}, \texttt{error}, \texttt{complete}.
+    \item \textbf{Subscription}: Execution of an Observable.
+\end{itemize}
+
+\subsection{Common Operators}
+\begin{lstlisting}
+import { map, filter, tap } from 'rxjs/operators';
+
+this.http.get('/api/users').pipe(
+  tap(data => console.log('Raw:', data)), // Side effect
+  filter(user => user.isActive),          // Filter
+  map(user => user.fullName)              // Transform
+).subscribe(names => this.names = names);
+\end{lstlisting}
+
+\subsection{Async Pipe (Best Practice)}
+Avoid manual \texttt{.subscribe()} in components to prevent memory leaks.
+\begin{lstlisting}
+// TS
+users$ = this.service.getUsers();
+
+// HTML
+@for (user of users$ | async; track user.id) { ... }
+\end{lstlisting}
+
+% ================= SECTION 8 =================
+\section{Common Commands (CLI)}
+
+\begin{description}[style=multiline,leftmargin=1cm,font=\ttfamily\bfseries]
+\item[ng new app] Create new project
+\item[ng serve] Run dev server (port 4200)
+\item[ng g c name] Generate Component
+\item[ng g s name] Generate Service
+\item[ng g m name] Generate Module
+\item[ng build] Build for production
+\end{description}
+
+\section{Modules (@NgModule)}
+\textit{Note: Only if not using Standalone Components.}
+\begin{lstlisting}
+@NgModule({
+  declarations: [AppComponent, HelloComponent],
+  imports: [
+    BrowserModule, 
+    FormsModule, 
+    HttpClientModule
+  ],
+  providers: [DataService],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+\end{lstlisting}
+
+\section{Important Imports}
+\begin{lstlisting}
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+\end{lstlisting}
+
+\section{Troubleshooting}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{No provider for X:} Add X to \texttt{providers} array or use \texttt{providedIn: 'root'}.
+    \item \textbf{Can't bind to 'ngModel':} Import \texttt{FormsModule}.
+    \item \textbf{404 on Refresh:} Server must redirect all routes to \texttt{index.html}.
+    \item \textbf{ExpressionChangedAfter...:} Data changed during change detection cycle. Use \texttt{ChangeDetectorRef}.
+\end{itemize}
+
+\end{multicols*}
+\end{document}
