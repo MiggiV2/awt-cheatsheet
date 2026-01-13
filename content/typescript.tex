@@ -1,0 +1,221 @@
+\lstset{language=TypeScript}
+
+\begin{multicols*}{3}
+% =========================================================
+\section{TypeScript Basics}
+\begin{itemize}
+\item TS is a superset of JS with static typing.
+\item \textbf{Structural Typing}: Types are compatible if their shape matches (duck typing) [file:4].
+\item \textbf{Type Inference}: TS infers types when not explicit (e.g., \texttt{let n = 5} is number) [file:4].
+\end{itemize}
+
+\subsection{Basic Types}
+\begin{itemize}
+\item \texttt{string, number, boolean}
+\item \texttt{any}: Opt-out of checking (avoid if possible).
+\item \texttt{unknown}: Safer \texttt{any}; must check type before use [file:4].
+\item \texttt{void}: No return value.
+\item \texttt{null, undefined}: Strictly checked if \texttt{strictNullChecks: true}.
+\end{itemize}
+
+\begin{lstlisting}
+let name: string = "Alice";
+let count: number = 42;
+let list: number[] = [1, 2, 3]; // Array
+let item: [string, number] = ["Id", 1]; // Tuple
+\end{lstlisting}
+
+% =========================================================
+\section{Interfaces \& Types}
+\subsection{Interfaces}
+\begin{itemize}
+\item Define object shapes. Can be extended/implemented [file:4].
+\end{itemize}
+\begin{lstlisting}
+interface User {
+  id: number;
+  name: string;
+  email?: string; // Optional
+  readonly role: string; // Immutable
+}
+\end{lstlisting}
+
+\subsection{Type Aliases}
+\begin{itemize}
+\item Can define primitives, unions, or intersections.
+\end{itemize}
+\begin{lstlisting}
+type ID = string | number; // Union
+type Point = { x: number; y: number };
+type Admin = User & { permissions: string[] }; // Intersection
+\end{lstlisting}
+
+% =========================================================
+\section{Classes}
+\begin{itemize}
+\item Access modifiers: \texttt{public} (default), \texttt{private} (\#), \texttt{protected} [file:4].
+\item Parameter properties: Shortcuts in constructor.
+\end{itemize}
+
+\begin{lstlisting}
+class Person {
+  // private name: string;
+  // public age: number;
+  
+  // Shortcut:
+  constructor(private name: string, public age: number) {}
+
+  greet(): string {
+    return `Hi, I'm ${this.name}`;
+  }
+}
+\end{lstlisting}
+
+% =========================================================
+\section{Functions}
+\begin{itemize}
+\item Explicit parameter and return types.
+\item Optional parameters \texttt{?} or defaults \texttt{= val}.
+\end{itemize}
+
+\begin{lstlisting}
+function add(a: number, b: number = 0): number {
+  return a + b;
+}
+
+const log = (msg: string): void => console.log(msg);
+\end{lstlisting}
+
+\subsection{Overloading}
+\begin{itemize}
+\item Define multiple signatures, then one implementation handling all cases [file:4].
+\end{itemize}
+
+% =========================================================
+\section{Generics}
+\begin{itemize}
+\item Reusable components working with various types [file:4].
+\item Convention: \texttt{T, U, V}.
+\end{itemize}
+
+\begin{lstlisting}
+function identity<T>(arg: T): T {
+  return arg;
+}
+let n = identity<number>(5);
+
+interface Box<T> {
+  contents: T;
+}
+\end{lstlisting}
+
+% =========================================================
+\section{Advanced Types}
+\subsection{Union Types}
+\begin{itemize}
+\item Value can be one of several types.
+\item Narrowing: Use \texttt{typeof}, \texttt{instanceof}, or type guards.
+\end{itemize}
+\begin{lstlisting}
+function printId(id: number | string) {
+  if (typeof id === "string") {
+    console.log(id.toUpperCase()); // TS knows it's string
+  }
+}
+\end{lstlisting}
+
+\subsection{Literal Types}
+\begin{itemize}
+\item Exact values as types [file:4].
+\end{itemize}
+\begin{lstlisting}
+type Direction = "UP" | "DOWN" | "LEFT" | "RIGHT";
+let move: Direction = "UP";
+\end{lstlisting}
+
+\subsection{Utility Types}
+\begin{itemize}
+\item \texttt{Partial<T>}: All props optional.
+\item \texttt{Required<T>}: All props required.
+\item \texttt{Readonly<T>}: All props readonly.
+\item \texttt{Pick<T, K>}: Select subset of keys.
+\item \texttt{Omit<T, K>}: Exclude subset of keys.
+\end{itemize}
+
+\begin{lstlisting}
+interface Todo {
+  title: string;
+  desc: string;
+}
+// title and desc become optional
+function update(todo: Partial<Todo>) { ... }
+\end{lstlisting}
+
+% =========================================================
+\section{Modules}
+\begin{itemize}
+\item File is a module if it has top-level \texttt{import} or \texttt{export} [file:4].
+\end{itemize}
+\begin{lstlisting}
+// math.ts
+export const PI = 3.14;
+export function add(x: number, y: number): number { return x + y; }
+
+// app.ts
+import { PI, add as sum } from "./math";
+\end{lstlisting}
+
+% =========================================================
+\section{TS Specific Operators}
+\subsection{Non-null Assertion (!)}
+\begin{itemize}
+\item Tell TS a value is definitely not null/undefined [file:4].
+\end{itemize}
+\begin{lstlisting}
+const el = document.getElementById("app");
+el!.innerText = "Hello"; // Trust me, el exists
+\end{lstlisting}
+
+\subsection{Optional Chaining (?.)}
+\begin{itemize}
+\item Stop early if null/undefined [file:4].
+\end{itemize}
+\begin{lstlisting}
+let x = user?.address?.city;
+\end{lstlisting}
+
+% =========================================================
+\section{Decorators}
+\begin{itemize}
+\item Functions adding metadata/behavior to classes/members [file:4].
+\item Syntax: \texttt{@expression}
+\end{itemize}
+\begin{lstlisting}
+function Log(target: any, key: string) {
+  console.log(`Property ${key} declared`);
+}
+
+class Demo {
+  @Log
+  name: string;
+}
+\end{lstlisting}
+
+% =========================================================
+\section{Common Errors / Pitfalls}
+\begin{itemize}
+\item \textbf{TS2322}: Type mismatch (e.g., assigning string to number).
+\item \textbf{TS2532}: Object is possibly 'undefined' (fix with check or \texttt{?}).
+\item \textbf{TS7006}: Implicit 'any' (add type annotation).
+\item \textbf{Excess Property Checks}: Object literals assigned to variables must match type exactly (no extra props).
+\end{itemize}
+
+\section{Configuration (tsconfig)}
+\begin{itemize}
+\item \texttt{strict: true} enables \texttt{noImplicitAny}, \texttt{strictNullChecks}, etc.
+\item \texttt{target}: JS version output (e.g., \texttt{ES6}).
+\item \texttt{outDir}: Output folder for .js files.
+\end{itemize}
+
+% =========================================================
+\end{multicols*}
