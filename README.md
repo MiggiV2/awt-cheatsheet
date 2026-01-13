@@ -1,6 +1,6 @@
 # Web Development Cheat Sheets
 
-This repository contains exam cheat sheets for **Angular**, **React**, and **Express.js**, based on the "Web Development" course (Prof. Windisch).
+This repository contains exam cheat sheets for **Angular**, **React**, **Express.js**, **TypeScript**, and **Docker**, based on the "Web Development" course (Prof. Windisch).
 
 The cheat sheets have been merged into a single printable PDF document with a consistent layout.
 
@@ -11,6 +11,8 @@ The cheat sheets have been merged into a single printable PDF document with a co
   - `angular.tex`: Angular specific topics (Components, Services, Routing, RxJS).
   - `react.tex`: React specific topics (JSX, Hooks, State, Router).
   - `express.tex`: Express.js specific topics (Routing, Middleware, API).
+  - `typescript.tex`: TypeScript basics (Types, Interfaces, Generics).
+  - `docker.tex`: Docker concepts (Dockerfile, Compose, Networking).
 - **`compile.sh`**: Helper script to build the PDF.
 
 ## 🚀 How to Build
@@ -51,3 +53,15 @@ The final PDF will be located at:
 - Error Handling & Async Patterns
 - Validation & Authentication
 - Serving Static Files & SPA
+
+### TypeScript
+- Basic Types & Interfaces
+- Classes & Functions
+- Generics & Utility Types
+- Advanced Types (Union, Literal)
+
+### Docker
+- Concepts & Architecture
+- Dockerfile Instructions
+- Docker Compose
+- Networking & Volumes
