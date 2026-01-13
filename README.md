@@ -1,15 +1,16 @@
 # Web Development Cheat Sheets
 
-This repository contains exam cheat sheets for **Angular** and **React**, based on the "Web Development" course (Prof. Windisch).
+This repository contains exam cheat sheets for **Angular**, **React**, and **Express.js**, based on the "Web Development" course (Prof. Windisch).
 
-The two cheat sheets have been merged into a single printable PDF document with a consistent layout.
+The cheat sheets have been merged into a single printable PDF document with a consistent layout.
 
 ## 📂 Project Structure
 
-- **`document.tex`**: The main LaTeX file that combines both cheat sheets.
+- **`document.tex`**: The main LaTeX file that combines all cheat sheets.
 - **`content/`**: Contains the specific content for each framework.
   - `angular.tex`: Angular specific topics (Components, Services, Routing, RxJS).
   - `react.tex`: React specific topics (JSX, Hooks, State, Router).
+  - `express.tex`: Express.js specific topics (Routing, Middleware, API).
 - **`compile.sh`**: Helper script to build the PDF.
 
 ## 🚀 How to Build
@@ -43,3 +44,10 @@ The final PDF will be located at:
 - Hooks (useState, useEffect, useRef, useReducer)
 - Context API
 - Performance (memo, useCallback)
+
+### Express.js
+- Routing & Middleware
+- Request & Response Objects
+- Error Handling & Async Patterns
+- Validation & Authentication
+- Serving Static Files & SPA
