@@ -4,7 +4,7 @@
 [![Download PDF](https://img.shields.io/badge/Download-PDF-red)](https://github.com/MiggiV2/awt-cheatsheet/releases/latest/download/document.pdf)
 
 ## Preview
-![Cheatsheet Preview](assets/preview.png)
+![Cheatsheet Preview](assets/preview.avif)
 
 This repository contains exam cheat sheets for **Angular**, **React**, **Express.js**, **TypeScript**, and **Docker**, based on the "Web Development" course (Prof. Windisch).
 
