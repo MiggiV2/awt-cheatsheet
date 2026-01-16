@@ -1,0 +1,230 @@
+\lstset{language=TypeScript}
+
+\begin{center}
+    {\Huge \textbf{JavaScript}}
+\end{center}
+\begin{multicols*}{3}
+% =========================================================
+\section{Variables \& Scope}
+\begin{itemize}
+\item \texttt{const}: Block-scoped, re-assignment forbidden (but objects are mutable).
+\item \texttt{let}: Block-scoped, re-assignable.
+\item \texttt{var}: Function-scoped, hoisted (avoid in modern JS).
+\end{itemize}
+
+\begin{lstlisting}
+const PI = 3.14;
+let count = 0;
+if (true) {
+  let count = 10; // new scope
+}
+console.log(count); // 0
+\end{lstlisting}
+
+% =========================================================
+\section{Arrow Functions}
+\begin{itemize}
+\item Concise syntax, lexical \texttt{this} binding (doesn't have own \texttt{this}).
+\item Implicit return for single expressions.
+\end{itemize}
+
+\begin{lstlisting}
+const add = (a, b) => a + b;
+const getObj = () => ({ id: 1 }); // wrap obj in ()
+\end{lstlisting}
+
+% =========================================================
+\section{Array Methods}
+\subsection{Transformation}
+\begin{itemize}
+\item \texttt{map(fn)}: Transform each element, returns new array.
+\item \texttt{filter(fn)}: Keep elements where fn returns true.
+\item \texttt{reduce(fn, init)}: Accumulate values into single result.
+\end{itemize}
+
+\begin{lstlisting}
+const nums = [1, 2, 3];
+const dbl = nums.map(n => n * 2); // [2, 4, 6]
+const odd = nums.filter(n => n % 2 !== 0); // [1, 3]
+const sum = nums.reduce((acc, n) => acc + n, 0); // 6
+\end{lstlisting}
+
+\subsection{Search \& Check}
+\begin{itemize}
+\item \texttt{find(fn)}: Returns first matching element or undefined.
+\item \texttt{findIndex(fn)}: Returns index of match or -1.
+\item \texttt{some(fn)}: True if \textit{any} match.
+\item \texttt{every(fn)}: True if \textit{all} match.
+\item \texttt{includes(val)}: True if value exists (primitive check).
+\end{itemize}
+
+\begin{lstlisting}
+const users = [{id: 1, name: 'A'}, {id: 2, name: 'B'}];
+const user = users.find(u => u.id === 1);
+const hasAdmin = users.some(u => u.role === 'admin');
+\end{lstlisting}
+
+% =========================================================
+\section{Destructuring \& Spread}
+\subsection{Destructuring}
+\begin{itemize}
+\item Extract values from arrays/objects into variables.
+\item Supports defaults and renaming.
+\end{itemize}
+
+\begin{lstlisting}
+// Objects
+const { name, age = 25 } = user;
+const { id: userId } = user; // rename id to userId
+
+// Arrays
+const [first, second, ...rest] = [10, 20, 30, 40];
+\end{lstlisting}
+
+\subsection{Spread Operator (...)}
+\begin{itemize}
+\item Expands iterables into elements. Used for cloning/merging.
+\item Shallow copy only!
+\end{itemize}
+
+\begin{lstlisting}
+const arr = [...oldArr, 4, 5];
+const obj = { ...oldObj, newProp: 'value' };
+// Merge
+const combined = { ...obj1, ...obj2 }; // obj2 overwrites obj1
+\end{lstlisting}
+
+% =========================================================
+\section{Objects}
+\begin{itemize}
+\item \texttt{Object.keys(obj)}: Array of keys.
+\item \texttt{Object.values(obj)}: Array of values.
+\item \texttt{Object.entries(obj)}: Array of \texttt{[key, value]} pairs.
+\item \texttt{Object.fromEntries(arr)}: Convert pairs back to object.
+\end{itemize}
+
+\begin{lstlisting}
+const person = { name: 'Ali', age: 30 };
+Object.entries(person).forEach(([k, v]) => {
+  console.log(k, v);
+});
+\end{lstlisting}
+
+\subsection{Shorthand Syntax}
+\begin{itemize}
+\item If key and variable name match, omit value.
+\end{itemize}
+\begin{lstlisting}
+const name = 'Susi';
+const user = { name }; // { name: 'Susi' }
+\end{lstlisting}
+
+% =========================================================
+\section{Async JavaScript}
+\subsection{Promises}
+\begin{itemize}
+\item Represents future value. States: pending, fulfilled, rejected.
+\item Methods: \texttt{.then()}, \texttt{.catch()}, \texttt{.finally()}.
+\end{itemize}
+
+\subsection{Async / Await}
+\begin{itemize}
+\item Syntactic sugar for Promises. Makes async code look sync.
+\item Must use inside \texttt{async} function.
+\end{itemize}
+
+\begin{lstlisting}
+async function fetchData() {
+  try {
+    const res = await fetch('/api/data');
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+\end{lstlisting}
+
+\subsection{Promise Combinators}
+\begin{itemize}
+\item \texttt{Promise.all([p1, p2])}: Wait for all (fail fast).
+\item \texttt{Promise.allSettled([...])}: Wait for all regardless of status.
+\item \texttt{Promise.race([...])}: First one to settle wins.
+\end{itemize}
+
+% =========================================================
+\section{Control Flow Tricks}
+\subsection{Short-Circuiting}
+\begin{itemize}
+\item \texttt{\&\&}: Returns last true value or first false. Used for conditional execution.
+\item \texttt{||}: Returns first true value. Used for defaults (but \texttt{0} is false).
+\item \texttt{??} (Nullish Coalescing): Returns right side only if left is \texttt{null} or \texttt{undefined}.
+\end{itemize}
+
+\begin{lstlisting}
+const name = inputName || 'Guest'; // 'Guest' if inputName is ""
+const count = inputCount ?? 10; // 10 only if inputCount is null/undefined
+isLoggedIn && showDashboard();
+\end{lstlisting}
+
+\subsection{Optional Chaining (?. )}
+\begin{itemize}
+\item Safely access nested properties. Returns \texttt{undefined} if path broken.
+\end{itemize}
+\begin{lstlisting}
+const city = user?.address?.city; // No error if address missing
+\end{lstlisting}
+
+% =========================================================
+\section{Modules (ESM)}
+\begin{itemize}
+\item Standard module system in browser/Node.
+\end{itemize}
+\begin{lstlisting}
+// Named
+export const add = (a, b) => a + b;
+import { add } from './math';
+
+// Default
+export default class User { ... }
+import User from './user';
+\end{lstlisting}
+
+% =========================================================
+\section{Classes}
+\begin{itemize}
+\item Syntactic sugar over prototypes.
+\item \texttt{super()}: Call parent constructor.
+\end{itemize}
+
+\begin{lstlisting}
+class Animal {
+  constructor(name) { this.name = name; }
+  speak() { console.log('Noise'); }
+}
+
+class Dog extends Animal {
+  speak() { console.log('Woof'); }
+}
+\end{lstlisting}
+
+% =========================================================
+\section{Useful Snippets}
+\subsection{Deep Clone (Simple)}
+\begin{lstlisting}
+const clone = JSON.parse(JSON.stringify(obj));
+// Modern: structuredClone(obj)
+\end{lstlisting}
+
+\subsection{Unique Array}
+\begin{lstlisting}
+const unique = [...new Set(array)];
+\end{lstlisting}
+
+\subsection{Wait (Sleep)}
+\begin{lstlisting}
+const wait = (ms) => new Promise(r => setTimeout(r, ms));
+await wait(1000);
+\end{lstlisting}
+
+\end{multicols*}
