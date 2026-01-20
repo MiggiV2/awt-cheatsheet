@@ -80,6 +80,25 @@ function Box({ children }) {
 \end{lstlisting}
 
 % =========================================================
+\section{Lists \& Keys}
+\begin{itemize}
+  \item Use \texttt{map()} to transform arrays into lists of elements .
+  \item Keys help React identify which items have changed/added/removed; must be unique among siblings .
+\end{itemize}
+
+\begin{lstlisting}
+function UserList({ users }) {
+  return (
+    <ul>
+      {users.map((user) => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+}
+\end{lstlisting}
+
+% =========================================================
 \section{State \& Events}
 \subsection{useState}
 \begin{itemize}

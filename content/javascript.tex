@@ -64,6 +64,18 @@ const user = users.find(u => u.id === 1);
 const hasAdmin = users.some(u => u.role === 'admin');
 \end{lstlisting}
 
+\subsection{Sorting}
+\begin{itemize}
+\item \texttt{sort(fn)}: Sorts in-place. Default sorts as strings!
+\item Compare fn: return $<0$ (a before b), $>0$ (b before a).
+\end{itemize}
+
+\begin{lstlisting}
+const nums = [5, 20, 10];
+nums.sort(); // [10, 20, 5] (String sort!)
+nums.sort((a, b) => a - b); // [5, 10, 20] (Numeric)
+\end{lstlisting}
+
 % =========================================================
 \section{Destructuring \& Spread}
 \subsection{Destructuring}
@@ -210,16 +222,6 @@ class Dog extends Animal {
 
 % =========================================================
 \section{Useful Snippets}
-\subsection{Deep Clone (Simple)}
-\begin{lstlisting}
-const clone = JSON.parse(JSON.stringify(obj));
-// Modern: structuredClone(obj)
-\end{lstlisting}
-
-\subsection{Unique Array}
-\begin{lstlisting}
-const unique = [...new Set(array)];
-\end{lstlisting}
 
 \subsection{Wait (Sleep)}
 \begin{lstlisting}
